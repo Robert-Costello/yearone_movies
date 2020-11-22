@@ -87,6 +87,18 @@ class Row extends Component {
                   value="Hide details"
                   onClick={this.toggleDetails}
                 ></input>
+                <div>
+                  <input
+                    type="button"
+                    value="Thumbs Up"
+                    onClick={() => console.log('up')}
+                  ></input>
+                  <input
+                    type="button"
+                    value="Thumbs Down"
+                    onClick={() => console.log('down')}
+                  ></input>
+                </div>
               </td>
             </tr>
           </tbody>

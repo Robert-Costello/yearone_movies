@@ -1,0 +1,89 @@
+import {Component} from 'react';
+import axios from 'axios';
+const key = 'ccdaa563df49d444d84702641c61b0ac';
+class Row extends Component {
+  _isMounted = false;
+  constructor() {
+    super();
+    this.viewDetails = this.viewDetails.bind(this);
+    this.getDirector = this.getDirector.bind(this);
+    this.formatDate = this.formatDate.bind(this);
+    this.state = {};
+  }
+  viewDetails() {
+    const id = this.props.movie.id;
+    window.open(`https://www.themoviedb.org/movie/${id}`, '_blank');
+  }
+
+  async getDirector(movie) {
+    try {
+      const castCrewResponse = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${key}&language=en-US
+        `);
+
+      const director = castCrewResponse.data.crew.filter(
+        (person) => person.job === 'Director'
+      )[0];
+
+      movie['director'] = director ? director.name : 'unlisted';
+      const directorName = movie.direct;
+      if (this._isMounted) this.setState({direct: directorName});
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  formatDate(dateString) {
+    const newDate =
+      dateString.slice(5, 7) +
+      '/' +
+      dateString.slice(8) +
+      '/' +
+      dateString.slice(0, 4);
+    return newDate;
+  }
+
+  componentDidMount() {
+    this._isMounted = true;
+    this.getDirector(this.props.movie);
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  render() {
+    const releaseDate = this.props.movie.release_date
+      ? this.props.movie.release_date
+      : '';
+    const newDate = this.formatDate(releaseDate);
+    return (
+      <table key={this.props.movie.id}>
+        <tbody>
+          <tr>
+            <td>
+              <img
+                name="image"
+                width="120"
+                src={`http://image.tmdb.org/t/p/w185/${this.props.movie.poster_path}`}
+                alt={''}
+              />
+            </td>
+            <td>
+              <h2>{this.props.movie.title}</h2>
+              <p>Directed by {this.props.movie.director}</p>
+              <p>Released {newDate}</p>
+              <p>{this.props.movie.overview}</p>
+              <input
+                type="button"
+                value="Details"
+                onClick={this.viewDetails}
+              ></input>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    );
+  }
+}
+
+export default Row;

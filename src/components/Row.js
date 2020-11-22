@@ -5,10 +5,12 @@ class Row extends Component {
   _isMounted = false;
   constructor() {
     super();
+
     this.viewDetails = this.viewDetails.bind(this);
     this.getDirector = this.getDirector.bind(this);
     this.formatDate = this.formatDate.bind(this);
-    this.state = {};
+    this.toggleDetails = this.toggleDetails.bind(this);
+    this.state = {detailView: false};
   }
   viewDetails() {
     const id = this.props.movie.id;
@@ -42,6 +44,11 @@ class Row extends Component {
     return newDate;
   }
 
+  toggleDetails() {
+    if (!this.state.detailView) this.setState({detailView: true});
+    if (this.state.detailView) this.setState({detailView: false});
+  }
+
   componentDidMount() {
     this._isMounted = true;
     this.getDirector(this.props.movie);
@@ -56,33 +63,64 @@ class Row extends Component {
       ? this.props.movie.release_date
       : '';
     const newDate = this.formatDate(releaseDate);
-    return (
-      <table key={this.props.movie.id}>
-        <tbody>
-          <tr>
-            <td>
-              <img
-                name="image"
-                width="120"
-                src={`http://image.tmdb.org/t/p/w185/${this.props.movie.poster_path}`}
-                alt={''}
-              />
-            </td>
-            <td>
-              <h2>{this.props.movie.title}</h2>
-              <p>Directed by {this.props.movie.director}</p>
-              <p>Released {newDate}</p>
-              <p>{this.props.movie.overview}</p>
-              <input
-                type="button"
-                value="Details"
-                onClick={this.viewDetails}
-              ></input>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    );
+
+    if (this.state.detailView) {
+      return (
+        <table key={this.props.movie.id}>
+          <tbody>
+            <tr>
+              <td>
+                <img
+                  name="image"
+                  width="120"
+                  src={`http://image.tmdb.org/t/p/w185/${this.props.movie.poster_path}`}
+                  alt={''}
+                />
+              </td>
+              <td>
+                <h2>{this.props.movie.title}</h2>
+                <p>Directed by {this.props.movie.director}</p>
+                <p>Released {newDate}</p>
+                <p>{this.props.movie.overview}</p>
+                <input
+                  type="button"
+                  value="Hide details"
+                  onClick={this.toggleDetails}
+                ></input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      );
+    } else {
+      return (
+        <table key={this.props.movie.id}>
+          <tbody>
+            <tr>
+              <td>
+                <img
+                  name="image"
+                  width="120"
+                  src={`http://image.tmdb.org/t/p/w185/${this.props.movie.poster_path}`}
+                  alt={''}
+                />
+              </td>
+              <td>
+                <h2>{this.props.movie.title}</h2>
+                {/* <p>Directed by {this.props.movie.director}</p> */}
+                <p>Released {newDate}</p>
+                {/* <p>{this.props.movie.overview}</p> */}
+                <input
+                  type="button"
+                  value="Show details"
+                  onClick={this.toggleDetails}
+                ></input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      );
+    }
   }
 }
 

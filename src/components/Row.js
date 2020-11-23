@@ -81,19 +81,54 @@ class Row extends Component {
   }
 
   like() {
-    let count = this.state.likes + 1;
-    this.setState({likes: count});
-    ratings.doc(this.state.movieId).update({
-      likes: count,
-    });
+    if (!this.state.movieId) {
+      ratings
+        .doc(String(this.props.movie.id))
+        .set({
+          title: this.props.movie.title,
+          id: String(this.props.movie.id),
+          likes: 1,
+          dislikes: 0,
+        })
+        .then(function () {
+          console.log('Document successfully written!');
+        })
+        .catch(function (error) {
+          console.error('Error writing document: ', error);
+        });
+    } else {
+      let count = this.state.likes + 1;
+      this.setState({likes: count});
+      console.log(ratings.doc(this.state.movieId));
+      ratings.doc(this.state.movieId).update({
+        likes: count,
+      });
+    }
   }
 
   dislike() {
-    let count = this.state.dislikes + 1;
-    this.setState({dislikes: count});
-    ratings.doc(this.state.movieId).update({
-      dislikes: count,
-    });
+    if (!this.state.movieId) {
+      ratings
+        .doc(String(this.props.movie.id))
+        .set({
+          title: this.props.movie.title,
+          id: String(this.props.movie.id),
+          likes: 0,
+          dislikes: 1,
+        })
+        .then(function () {
+          console.log('Document successfully written!');
+        })
+        .catch(function (error) {
+          console.error('Error writing document: ', error);
+        });
+    } else {
+      let count = this.state.dislikes + 1;
+      this.setState({dislikes: count});
+      ratings.doc(this.state.movieId).update({
+        dislikes: count,
+      });
+    }
   }
 
   getRatings(callback) {
@@ -156,10 +191,14 @@ class Row extends Component {
                   onClick={this.toggleDetails}
                 ></input>
                 <div>
-                  <input type="button" value="⭐" onClick={this.like}></input>
                   <input
                     type="button"
-                    value="💔"
+                    value={`⭐ ${this.state.likes}`}
+                    onClick={this.like}
+                  ></input>
+                  <input
+                    type="button"
+                    value={`💔 ${this.state.dislikes}`}
                     onClick={this.dislike}
                   ></input>
                 </div>

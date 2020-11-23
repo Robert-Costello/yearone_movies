@@ -1,31 +1,6 @@
 import {Component} from 'react';
 import Row from './Row';
 
-//==========================================================
-
-import {firebaseConfig} from './Firebase';
-import firebase from 'firebase';
-
-// For the module builds, these are available in the following manner
-// (replace <PACKAGE> with the name of a component - i.e. auth, database, etc):
-
-// CommonJS Modules:
-// const firebase = require('firebase/app');
-// require('firebase/<PACKAGE>');
-
-// ES Modules:
-// import firebase from 'firebase/app';
-// import 'firebase/<PACKAGE>';
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-firebase.analytics();
-const db = firebase.firestore();
-
-let ratings = db.collection('movie-ratings');
-
-//==========================================================
-
 const axios = require('axios');
 const key = 'ccdaa563df49d444d84702641c61b0ac';
 const input = 'Evil Dead';
@@ -36,8 +11,7 @@ export class Search extends Component {
     this.getMovies = this.getMovies.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.getChats = this.getChats.bind(this);
-    this.unsub = () => {};
+
     this.state = {};
   }
 
@@ -48,7 +22,7 @@ export class Search extends Component {
       );
 
       const movies = response.data.results;
-
+      console.log(movies);
       movies.sort((a, b) => b.popularity - a.popularity);
 
       let movieRows = [];
@@ -70,19 +44,6 @@ export class Search extends Component {
     }
   }
 
-  getChats(callback) {
-    this.unsub = ratings
-      // .where('room', '==', 'movie-ratings')
-      .orderBy('id')
-      .onSnapshot((snapshot) => {
-        snapshot.docChanges().forEach((change) => {
-          if (change.type === 'added') {
-            callback(change.doc.data());
-          }
-        });
-      });
-  }
-
   handleChange(e) {
     this.getMovies(e.target.value);
   }
@@ -95,11 +56,6 @@ export class Search extends Component {
 
   componentDidMount() {
     this.getMovies('Zatoichi');
-    this.getChats((data) => console.log('$$$$$', data));
-  }
-
-  componentWillUnmount() {
-    this.unsub();
   }
 
   render() {

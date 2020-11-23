@@ -1,6 +1,33 @@
 import {Component} from 'react';
 import axios from 'axios';
+
+//==========================================================
+
+import {firebaseConfig} from './Firebase';
+import firebase from 'firebase';
+
+// For the module builds, these are available in the following manner
+// (replace <PACKAGE> with the name of a component - i.e. auth, database, etc):
+
+// CommonJS Modules:
+// const firebase = require('firebase/app');
+// require('firebase/<PACKAGE>');
+
+// ES Modules:
+// import firebase from 'firebase/app';
+// import 'firebase/<PACKAGE>';
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+const db = firebase.firestore();
+
+let ratings = db.collection('movie-ratings');
+
+//==========================================================
+
 const key = 'ccdaa563df49d444d84702641c61b0ac';
+
 class Row extends Component {
   _isMounted = false;
   constructor() {
@@ -10,9 +37,11 @@ class Row extends Component {
     this.getDirector = this.getDirector.bind(this);
     this.formatDate = this.formatDate.bind(this);
     this.toggleDetails = this.toggleDetails.bind(this);
-    this.upVote = this.upVote.bind(this);
-    this.downVote = this.downVote.bind(this);
-    this.state = {detailView: false};
+    this.like = this.like.bind(this);
+    this.dislike = this.dislike.bind(this);
+    this.getRatings = this.getRatings.bind(this);
+    this.unsub = () => {};
+    this.state = {detailView: false, likes: 0, dislikes: 0, movieId: ''};
   }
   viewDetails() {
     const id = this.props.movie.id;
@@ -51,20 +80,51 @@ class Row extends Component {
     if (this.state.detailView) this.setState({detailView: false});
   }
 
-  upVote() {
-    console.log('👍');
+  like() {
+    let count = this.state.likes + 1;
+    this.setState({likes: count});
+    ratings.doc(this.state.movieId).update({
+      likes: count,
+    });
   }
 
-  downVote() {
-    console.log('👎');
+  dislike() {
+    let count = this.state.dislikes + 1;
+    this.setState({dislikes: count});
+    ratings.doc(this.state.movieId).update({
+      dislikes: count,
+    });
+    console.log('💔', count);
   }
+
+  getRatings(callback) {
+    this.unsub = ratings
+      .where('id', '==', this.props.movie.id)
+      .onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === 'added') {
+            callback(change.doc.data());
+          }
+        });
+      });
+  }
+
   componentDidMount() {
     this._isMounted = true;
     this.getDirector(this.props.movie);
+    this.getRatings((data) => {
+      this.setState({
+        likes: data.likes,
+        dislikes: data.dislikes,
+        movieId: String(data.id),
+      });
+      console.log('$$$$$', data);
+    });
   }
 
   componentWillUnmount() {
     this._isMounted = false;
+    this.unsub();
   }
 
   render() {
@@ -97,11 +157,11 @@ class Row extends Component {
                   onClick={this.toggleDetails}
                 ></input>
                 <div>
-                  <input type="button" value="👍" onClick={this.upVote}></input>
+                  <input type="button" value="⭐" onClick={this.like}></input>
                   <input
                     type="button"
-                    value="👎"
-                    onClick={this.downVote}
+                    value="💔"
+                    onClick={this.dislike}
                   ></input>
                 </div>
               </td>

@@ -37,7 +37,5 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "firestore-export-import": "^0.8.0"
-  }
+  "devDependencies": {}
 }

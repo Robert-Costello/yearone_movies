@@ -10,6 +10,8 @@ class Row extends Component {
     this.getDirector = this.getDirector.bind(this);
     this.formatDate = this.formatDate.bind(this);
     this.toggleDetails = this.toggleDetails.bind(this);
+    this.upVote = this.upVote.bind(this);
+    this.downVote = this.downVote.bind(this);
     this.state = {detailView: false};
   }
   viewDetails() {
@@ -49,6 +51,13 @@ class Row extends Component {
     if (this.state.detailView) this.setState({detailView: false});
   }
 
+  upVote() {
+    console.log('👍');
+  }
+
+  downVote() {
+    console.log('👎');
+  }
   componentDidMount() {
     this._isMounted = true;
     this.getDirector(this.props.movie);
@@ -88,15 +97,11 @@ class Row extends Component {
                   onClick={this.toggleDetails}
                 ></input>
                 <div>
+                  <input type="button" value="👍" onClick={this.upVote}></input>
                   <input
                     type="button"
-                    value="Thumbs Up"
-                    onClick={() => console.log('up')}
-                  ></input>
-                  <input
-                    type="button"
-                    value="Thumbs Down"
-                    onClick={() => console.log('down')}
+                    value="👎"
+                    onClick={this.downVote}
                   ></input>
                 </div>
               </td>

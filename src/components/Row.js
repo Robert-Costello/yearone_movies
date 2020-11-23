@@ -94,15 +94,14 @@ class Row extends Component {
     ratings.doc(this.state.movieId).update({
       dislikes: count,
     });
-    console.log('💔', count);
   }
 
   getRatings(callback) {
     this.unsub = ratings
-      .where('id', '==', this.props.movie.id)
+      .where('id', '==', String(this.props.movie.id))
       .onSnapshot((snapshot) => {
         snapshot.docChanges().forEach((change) => {
-          if (change.type === 'added') {
+          if (change.type === 'added' || change.type === 'modified') {
             callback(change.doc.data());
           }
         });

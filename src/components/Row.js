@@ -30,10 +30,10 @@ const key = 'ccdaa563df49d444d84702641c61b0ac';
 
 class Row extends Component {
   _isMounted = false;
+  imageUrl = '';
   constructor() {
     super();
 
-    this.viewDetails = this.viewDetails.bind(this);
     this.getDirector = this.getDirector.bind(this);
     this.formatDate = this.formatDate.bind(this);
     this.toggleDetails = this.toggleDetails.bind(this);
@@ -42,10 +42,6 @@ class Row extends Component {
     this.getRatings = this.getRatings.bind(this);
     this.unsub = () => {};
     this.state = {detailView: false, likes: 0, dislikes: 0, movieId: ''};
-  }
-  viewDetails() {
-    const id = this.props.movie.id;
-    window.open(`https://www.themoviedb.org/movie/${id}`, '_blank');
   }
 
   async getDirector(movie) {
@@ -144,6 +140,12 @@ class Row extends Component {
   }
 
   componentDidMount() {
+    if (!this.props.movie.poster_path) {
+      this.imageUrl =
+        'https://thefemalegazers.files.wordpress.com/2018/08/coming-of-age-film.jpg';
+    } else {
+      this.imageUrl = `http://image.tmdb.org/t/p/w185/${this.props.movie.poster_path}`;
+    }
     this._isMounted = true;
     this.getDirector(this.props.movie);
     this.getRatings((data) => {
@@ -162,7 +164,7 @@ class Row extends Component {
   }
 
   render() {
-    const releaseDate = this.props.movie.release_date
+    const releaseDate = this.props.movie.release_date.length
       ? this.props.movie.release_date
       : '';
     const newDate = this.formatDate(releaseDate);
@@ -173,12 +175,7 @@ class Row extends Component {
           <tbody>
             <tr>
               <td>
-                <img
-                  name="image"
-                  width="120"
-                  src={`http://image.tmdb.org/t/p/w185/${this.props.movie.poster_path}`}
-                  alt={''}
-                />
+                <img name="image" width="120" src={this.imageUrl} alt={''} />
               </td>
               <td>
                 <h2>{this.props.movie.title}</h2>
@@ -213,12 +210,7 @@ class Row extends Component {
           <tbody>
             <tr>
               <td>
-                <img
-                  name="image"
-                  width="120"
-                  src={`http://image.tmdb.org/t/p/w185/${this.props.movie.poster_path}`}
-                  alt={''}
-                />
+                <img name="image" width="120" src={this.imageUrl} alt={''} />
               </td>
               <td>
                 <h2>{this.props.movie.title}</h2>

@@ -14,13 +14,13 @@ class Row extends Component {
     this.getDirector = this.getDirector.bind(this);
     this.formatDate = this.formatDate.bind(this);
     this.toggleDetails = this.toggleDetails.bind(this);
-    this.like = this.like.bind(this);
-    this.dislike = this.dislike.bind(this);
+    this.rate = this.rate.bind(this);
     this.getRatings = this.getRatings.bind(this);
     this.unsub = () => {};
     this.state = {detailView: false, likes: 0, dislikes: 0, movieId: ''};
   }
 
+  // Grabs crew (director) information from a separate endpoint from general movie info
   async getDirector(movie) {
     try {
       const castCrewResponse = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${key}&language=en-US
@@ -53,42 +53,22 @@ class Row extends Component {
     if (this.state.detailView) this.setState({detailView: false});
   }
 
-  like() {
-    if (!this.state.movieId) {
-      ratings
-        .doc(String(this.props.movie.id))
-        .set({
-          title: this.props.movie.title,
-          id: String(this.props.movie.id),
-          likes: 1,
-          dislikes: 0,
-        })
-        .then(function () {
-          console.log('Document successfully written!');
-        })
-        .catch(function (error) {
-          console.error('Error writing document: ', error);
-        });
-    } else {
-      let count = this.state.likes + 1;
-      this.setState({likes: count});
-      console.log(ratings.doc(this.state.movieId));
-      ratings.doc(this.state.movieId).update({
-        likes: count,
-      });
-    }
-  }
+  rate(e) {
+    const choice = e.target.name;
+    let docObj = {
+      title: this.props.movie.title,
+      id: String(this.props.movie.id),
+      likes: 0,
+      dislikes: 0,
+    };
 
-  dislike() {
+    if (choice === 'likes') docObj.likes = 1;
+    else docObj.dislikes = 1;
+
     if (!this.state.movieId) {
       ratings
         .doc(String(this.props.movie.id))
-        .set({
-          title: this.props.movie.title,
-          id: String(this.props.movie.id),
-          likes: 0,
-          dislikes: 1,
-        })
+        .set(docObj)
         .then(function () {
           console.log('Document successfully written!');
         })
@@ -96,11 +76,18 @@ class Row extends Component {
           console.error('Error writing document: ', error);
         });
     } else {
-      let count = this.state.dislikes + 1;
-      this.setState({dislikes: count});
-      ratings.doc(this.state.movieId).update({
-        dislikes: count,
-      });
+      let count = this.state[choice] + 1;
+      if (choice === 'likes') {
+        this.setState({likes: count});
+        ratings.doc(this.state.movieId).update({
+          likes: count,
+        });
+      } else {
+        this.setState({dislikes: count});
+        ratings.doc(this.state.movieId).update({
+          dislikes: count,
+        });
+      }
     }
   }
 
@@ -131,7 +118,6 @@ class Row extends Component {
         dislikes: data.dislikes,
         movieId: String(data.id),
       });
-      console.log('$$$$$', data);
     });
   }
 
@@ -154,12 +140,6 @@ class Row extends Component {
               <tr>
                 <td>
                   <img name="image" width="120" src={this.imageUrl} alt={''} />
-                </td>
-                <td>
-                  <h2>{this.props.movie.title}</h2>
-                  <p>Directed by {this.props.movie.director}</p>
-                  <p>Released {newDate}</p>
-                  <p>{this.props.movie.overview}</p>
                   <input
                     type="button"
                     value="Hide details"
@@ -167,16 +147,24 @@ class Row extends Component {
                   ></input>
                   <div>
                     <input
+                      name="likes"
                       type="button"
                       value={`⭐ ${this.state.likes}`}
-                      onClick={this.like}
+                      onClick={this.rate}
                     ></input>
                     <input
+                      name="dislikes"
                       type="button"
                       value={`💔 ${this.state.dislikes}`}
-                      onClick={this.dislike}
+                      onClick={this.rate}
                     ></input>
                   </div>
+                </td>
+                <td>
+                  <h2>{this.props.movie.title}</h2>
+                  <p>Directed by {this.props.movie.director}</p>
+                  <p>Released {newDate}</p>
+                  <p>{this.props.movie.overview}</p>
                 </td>
               </tr>
             </tbody>
@@ -190,17 +178,18 @@ class Row extends Component {
             <tr>
               <td>
                 <img name="image" width="120" src={this.imageUrl} alt={''} />
+                <div>
+                  <input
+                    type="button"
+                    value="Show details"
+                    onClick={this.toggleDetails}
+                  ></input>
+                </div>
               </td>
               <td>
                 <h2>{this.props.movie.title}</h2>
-                {/* <p>Directed by {this.props.movie.director}</p> */}
+
                 <p>Released {newDate}</p>
-                {/* <p>{this.props.movie.overview}</p> */}
-                <input
-                  type="button"
-                  value="Show details"
-                  onClick={this.toggleDetails}
-                ></input>
               </td>
             </tr>
           </tbody>

@@ -21,6 +21,7 @@ class Row extends Component {
     this.state = {detailView: false, likes: 0, dislikes: 0, movieId: ''};
   }
 
+  // Grabs crew information from a separate endpoint from general movie info
   async getDirector(movie) {
     try {
       const castCrewResponse = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${key}&language=en-US
@@ -72,7 +73,6 @@ class Row extends Component {
     } else {
       let count = this.state.likes + 1;
       this.setState({likes: count});
-      console.log(ratings.doc(this.state.movieId));
       ratings.doc(this.state.movieId).update({
         likes: count,
       });
@@ -131,7 +131,6 @@ class Row extends Component {
         dislikes: data.dislikes,
         movieId: String(data.id),
       });
-      console.log('$$$$$', data);
     });
   }
 
@@ -154,12 +153,6 @@ class Row extends Component {
               <tr>
                 <td>
                   <img name="image" width="120" src={this.imageUrl} alt={''} />
-                </td>
-                <td>
-                  <h2>{this.props.movie.title}</h2>
-                  <p>Directed by {this.props.movie.director}</p>
-                  <p>Released {newDate}</p>
-                  <p>{this.props.movie.overview}</p>
                   <input
                     type="button"
                     value="Hide details"
@@ -178,6 +171,12 @@ class Row extends Component {
                     ></input>
                   </div>
                 </td>
+                <td>
+                  <h2>{this.props.movie.title}</h2>
+                  <p>Directed by {this.props.movie.director}</p>
+                  <p>Released {newDate}</p>
+                  <p>{this.props.movie.overview}</p>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -190,17 +189,18 @@ class Row extends Component {
             <tr>
               <td>
                 <img name="image" width="120" src={this.imageUrl} alt={''} />
+                <div>
+                  <input
+                    type="button"
+                    value="Show details"
+                    onClick={this.toggleDetails}
+                  ></input>
+                </div>
               </td>
               <td>
                 <h2>{this.props.movie.title}</h2>
-                {/* <p>Directed by {this.props.movie.director}</p> */}
+
                 <p>Released {newDate}</p>
-                {/* <p>{this.props.movie.overview}</p> */}
-                <input
-                  type="button"
-                  value="Show details"
-                  onClick={this.toggleDetails}
-                ></input>
               </td>
             </tr>
           </tbody>

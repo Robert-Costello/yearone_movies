@@ -71,8 +71,7 @@ export class Search extends Component {
             onChange={this.handleChange}
           ></input>
         </form>
-
-        {this.state.rows}
+        <div className="rows">{this.state.rows}</div>
       </div>
     );
   }

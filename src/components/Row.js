@@ -1,30 +1,7 @@
 import {Component} from 'react';
 import axios from 'axios';
 
-//==========================================================
-
-import {firebaseConfig} from './Firebase';
-import firebase from 'firebase';
-
-// For the module builds, these are available in the following manner
-// (replace <PACKAGE> with the name of a component - i.e. auth, database, etc):
-
-// CommonJS Modules:
-// const firebase = require('firebase/app');
-// require('firebase/<PACKAGE>');
-
-// ES Modules:
-// import firebase from 'firebase/app';
-// import 'firebase/<PACKAGE>';
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-firebase.analytics();
-const db = firebase.firestore();
-
-let ratings = db.collection('movie-ratings');
-
-//==========================================================
+import {ratings} from './Firebase';
 
 const key = 'ccdaa563df49d444d84702641c61b0ac';
 
@@ -171,38 +148,40 @@ class Row extends Component {
 
     if (this.state.detailView) {
       return (
-        <table key={this.props.movie.id}>
-          <tbody>
-            <tr>
-              <td>
-                <img name="image" width="120" src={this.imageUrl} alt={''} />
-              </td>
-              <td>
-                <h2>{this.props.movie.title}</h2>
-                <p>Directed by {this.props.movie.director}</p>
-                <p>Released {newDate}</p>
-                <p>{this.props.movie.overview}</p>
-                <input
-                  type="button"
-                  value="Hide details"
-                  onClick={this.toggleDetails}
-                ></input>
-                <div>
+        <div className="movie-table">
+          <table key={this.props.movie.id}>
+            <tbody>
+              <tr>
+                <td>
+                  <img name="image" width="120" src={this.imageUrl} alt={''} />
+                </td>
+                <td>
+                  <h2>{this.props.movie.title}</h2>
+                  <p>Directed by {this.props.movie.director}</p>
+                  <p>Released {newDate}</p>
+                  <p>{this.props.movie.overview}</p>
                   <input
                     type="button"
-                    value={`⭐ ${this.state.likes}`}
-                    onClick={this.like}
+                    value="Hide details"
+                    onClick={this.toggleDetails}
                   ></input>
-                  <input
-                    type="button"
-                    value={`💔 ${this.state.dislikes}`}
-                    onClick={this.dislike}
-                  ></input>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                  <div>
+                    <input
+                      type="button"
+                      value={`⭐ ${this.state.likes}`}
+                      onClick={this.like}
+                    ></input>
+                    <input
+                      type="button"
+                      value={`💔 ${this.state.dislikes}`}
+                      onClick={this.dislike}
+                    ></input>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       );
     } else {
       return (

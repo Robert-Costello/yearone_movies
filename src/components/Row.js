@@ -164,7 +164,7 @@ class Row extends Component {
   }
 
   render() {
-    const releaseDate = this.props.movie.release_date.length
+    const releaseDate = this.props.movie.release_date
       ? this.props.movie.release_date
       : '';
     const newDate = this.formatDate(releaseDate);

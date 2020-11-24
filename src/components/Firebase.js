@@ -1,6 +1,9 @@
-// import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/database';
+import 'firebase/firestore';
+import 'firebase/analytics';
 
-export const firebaseConfig = {
+const firebaseConfig = {
   apiKey: 'AIzaSyC4IjKfxn92xbl3axMAiT3RyzbuyQLHWHo',
   authDomain: 'nosql-robert.firebaseapp.com',
   databaseURL: 'https://nosql-robert.firebaseio.com',
@@ -11,40 +14,14 @@ export const firebaseConfig = {
   measurementId: 'G-NLZ4RVF2W3',
 };
 
-// //   // Initialize Firebase
-// firebase.initializeApp(firebaseConfig);
-// firebase.analytics();
-// const db = firebase.firestore();
+//================Firstore Setup===========================
 
-// let chats = db.collection('chats');
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
 
-// function getChats(callback) {
-//   this.unsub = this.chats
-//     .where('room', '==', 'gaming')
-//     .orderBy('created_at')
-//     .onSnapshot((snapshot) => {
-//       snapshot.docChanges().forEach((change) => {
-//         if (change.type === 'added') {
-//           // UPDATE UI
-//           callback(change.doc.data());
-//         }
-//       });
-//     });
-// }
+export const db = firebase.firestore();
 
-// getChats((data) => console.log(data));
-// console.log('PPPPP');
+export const ratings = db.collection('movie-ratings');
 
-// <!-- The core Firebase JS SDK is always required and must be listed first -->
-// <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-app.js"></script>
-
-// <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-firestore.js"></script>
-
-// <!-- TODO: Add SDKs for Firebase products that you want to use
-//      https://firebase.google.com/docs/web/setup#available-libraries -->
-// <script src="https://www.gstatic.com/firebasejs/7.21.1/firebase-analytics.js"></script>
-
-// <script>
-//   // Your web app's Firebase configuration
-//   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// </script>
+//=========================================================

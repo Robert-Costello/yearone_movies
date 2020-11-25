@@ -46,6 +46,7 @@
 .search-form {
   padding-left: 15px;
   display: flex;
+  align-items: center;
 }
 
 .search-input {
@@ -53,12 +54,8 @@
   border-radius: 6px;
 }
 
-.search-button .search-button:focus {
-  border-radius: 6px;
-  margin: 0px;
-  outline: none;
-  border-radius: 6px;
-  color: white;
+.search-icon {
+  margin-left: 3px;
 }
 
 input:focus {
@@ -93,8 +90,8 @@ p {
 
 hr {
   width: 96%;
-  color: #a8a7a7;
-  height: 1px;
+  opacity: 35%;
+  border: 1px solid #a8a7a7;
 }
 .outter-shell {
   width: 100%;
@@ -106,6 +103,10 @@ hr {
 .poster {
   margin-right: 25px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.poster-image {
+  vertical-align: bottom;
 }
 
 .hide-rate {

@@ -138,7 +138,7 @@ class Movie extends Component {
 
     if (this.state.detailView) {
       return (
-        <div>
+        <div className="outter-shell">
           <div className="movie-container" key={this.props.movie.id}>
             <div className="poster">
               <img

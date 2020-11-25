@@ -112,7 +112,7 @@ class Row extends Component {
       this.imageUrl =
         'https://thefemalegazers.files.wordpress.com/2018/08/coming-of-age-film.jpg';
     } else {
-      this.imageUrl = `http://image.tmdb.org/t/p/w185/${this.props.movie.poster_path}`;
+      this.imageUrl = `http://image.tmdb.org/t/p/w500/${this.props.movie.poster_path}`;
     }
     this._isMounted = true;
     this.getCrewCast(this.props.movie);
@@ -138,49 +138,52 @@ class Row extends Component {
 
     if (this.state.detailView) {
       return (
-        <div className="movie-container">
-          <div key={this.props.movie.id}>
-            <div>
+        <div>
+          <div className="movie-container" key={this.props.movie.id}>
+            <div className="poster">
+              <img name="image" width="300" src={this.imageUrl} alt={''} />
+            </div>
+            <div className="title">
+              <h2>{this.props.movie.title}</h2>
+              <input
+                type="button"
+                value="Hide details"
+                onClick={this.toggleDetails}
+              ></input>
               <div>
-                <h2>{this.props.movie.title}</h2>
-                <img name="image" width="120" src={this.imageUrl} alt={''} />
                 <input
+                  name="likes"
                   type="button"
-                  value="Hide details"
-                  onClick={this.toggleDetails}
+                  value={`⭐ ${this.state.likes}`}
+                  onClick={this.rate}
                 ></input>
-                <div>
-                  <input
-                    name="likes"
-                    type="button"
-                    value={`⭐ ${this.state.likes}`}
-                    onClick={this.rate}
-                  ></input>
-                  <input
-                    name="dislikes"
-                    type="button"
-                    value={`💔 ${this.state.dislikes}`}
-                    onClick={this.rate}
-                  ></input>
-                </div>
-              </div>
-              <div>
-                <p>Directed by {this.props.movie.director}</p>
-                <p>Starring {this.props.movie.starring}</p>
-                <p>Released {newDate}</p>
-                <p>{this.props.movie.overview}</p>
+                <input
+                  name="dislikes"
+                  type="button"
+                  value={`💔 ${this.state.dislikes}`}
+                  onClick={this.rate}
+                ></input>
               </div>
             </div>
+            <div className="details">
+              <h3>Directed by {this.props.movie.director}</h3>
+              <h3>Starring {this.props.movie.starring}</h3>
+              <h4>Released {newDate}</h4>
+              <p>{this.props.movie.overview}</p>
+            </div>
           </div>
+          <hr></hr>
         </div>
       );
     } else {
       return (
-        <div className="movie-container" key={this.props.movie.id}>
-          <div>
-            <h2 className="title">{this.props.movie.title}</h2>
-            <img name="image" width="200" src={this.imageUrl} alt={''} />
-            <div>
+        <div className="outter-shell">
+          <div className="movie-container" key={this.props.movie.id}>
+            <div className="poster">
+              <img name="image" width="200" src={this.imageUrl} alt={''} />
+            </div>
+            <div className="title">
+              <h2>{this.props.movie.title}</h2>
               <input
                 type="button"
                 value="Show details"
@@ -188,6 +191,7 @@ class Row extends Component {
               ></input>
             </div>
           </div>
+          <hr></hr>
         </div>
       );
     }

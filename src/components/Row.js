@@ -145,24 +145,30 @@ class Row extends Component {
             </div>
             <div className="title">
               <h2>{this.props.movie.title}</h2>
-              <input
-                type="button"
-                value="Hide details"
-                onClick={this.toggleDetails}
-              ></input>
-              <div>
+              <div className="hide-rate">
                 <input
-                  name="likes"
+                  className="rate-button"
                   type="button"
-                  value={`⭐ ${this.state.likes}`}
-                  onClick={this.rate}
+                  value="Hide details"
+                  onClick={this.toggleDetails}
                 ></input>
-                <input
-                  name="dislikes"
-                  type="button"
-                  value={`💔 ${this.state.dislikes}`}
-                  onClick={this.rate}
-                ></input>
+
+                <div className="rate">
+                  <input
+                    className="rate-button"
+                    name="likes"
+                    type="button"
+                    value={`⭐ ${this.state.likes}`}
+                    onClick={this.rate}
+                  ></input>
+                  <input
+                    className="rate-button"
+                    name="dislikes"
+                    type="button"
+                    value={`💔 ${this.state.dislikes}`}
+                    onClick={this.rate}
+                  ></input>
+                </div>
               </div>
             </div>
             <div className="details">

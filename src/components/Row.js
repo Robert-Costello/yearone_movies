@@ -11,7 +11,7 @@ class Row extends Component {
   constructor() {
     super();
 
-    this.getDirector = this.getDirector.bind(this);
+    this.getCrewCast = this.getCrewCast.bind(this);
     this.formatDate = this.formatDate.bind(this);
     this.toggleDetails = this.toggleDetails.bind(this);
     this.rate = this.rate.bind(this);
@@ -21,7 +21,7 @@ class Row extends Component {
   }
 
   // Grabs crew (director) information from a separate endpoint from general movie info
-  async getDirector(movie) {
+  async getCrewCast(movie) {
     try {
       const castCrewResponse = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${key}&language=en-US
         `);
@@ -30,9 +30,13 @@ class Row extends Component {
         (person) => person.job === 'Director'
       )[0];
 
+      const starring = castCrewResponse.data.cast[0].name;
+
       movie['director'] = director ? director.name : 'unlisted';
+      movie['starring'] = starring ? starring : 'unlisted';
       const directorName = movie.direct;
-      if (this._isMounted) this.setState({direct: directorName});
+      if (this._isMounted)
+        this.setState({direct: directorName, starring: starring});
     } catch (error) {
       console.log(error);
     }
@@ -111,7 +115,7 @@ class Row extends Component {
       this.imageUrl = `http://image.tmdb.org/t/p/w185/${this.props.movie.poster_path}`;
     }
     this._isMounted = true;
-    this.getDirector(this.props.movie);
+    this.getCrewCast(this.props.movie);
     this.getRatings((data) => {
       this.setState({
         likes: data.likes,
@@ -134,66 +138,57 @@ class Row extends Component {
 
     if (this.state.detailView) {
       return (
-        <div className="movie-table">
-          <table key={this.props.movie.id}>
-            <tbody>
-              <tr>
-                <td>
-                  <img name="image" width="120" src={this.imageUrl} alt={''} />
+        <div className="movie-container">
+          <div key={this.props.movie.id}>
+            <div>
+              <div>
+                <h2>{this.props.movie.title}</h2>
+                <img name="image" width="120" src={this.imageUrl} alt={''} />
+                <input
+                  type="button"
+                  value="Hide details"
+                  onClick={this.toggleDetails}
+                ></input>
+                <div>
                   <input
+                    name="likes"
                     type="button"
-                    value="Hide details"
-                    onClick={this.toggleDetails}
+                    value={`⭐ ${this.state.likes}`}
+                    onClick={this.rate}
                   ></input>
-                  <div>
-                    <input
-                      name="likes"
-                      type="button"
-                      value={`⭐ ${this.state.likes}`}
-                      onClick={this.rate}
-                    ></input>
-                    <input
-                      name="dislikes"
-                      type="button"
-                      value={`💔 ${this.state.dislikes}`}
-                      onClick={this.rate}
-                    ></input>
-                  </div>
-                </td>
-                <td>
-                  <h2>{this.props.movie.title}</h2>
-                  <p>Directed by {this.props.movie.director}</p>
-                  <p>Released {newDate}</p>
-                  <p>{this.props.movie.overview}</p>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <input
+                    name="dislikes"
+                    type="button"
+                    value={`💔 ${this.state.dislikes}`}
+                    onClick={this.rate}
+                  ></input>
+                </div>
+              </div>
+              <div>
+                <p>Directed by {this.props.movie.director}</p>
+                <p>Starring {this.props.movie.starring}</p>
+                <p>Released {newDate}</p>
+                <p>{this.props.movie.overview}</p>
+              </div>
+            </div>
+          </div>
         </div>
       );
     } else {
       return (
-        <table key={this.props.movie.id}>
-          <tbody>
-            <tr>
-              <td>
-                <img name="image" width="120" src={this.imageUrl} alt={''} />
-                <div>
-                  <input
-                    type="button"
-                    value="Show details"
-                    onClick={this.toggleDetails}
-                  ></input>
-                </div>
-              </td>
-              <td>
-                <h2>{this.props.movie.title}</h2>
-
-                <p>Released {newDate}</p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="movie-container" key={this.props.movie.id}>
+          <div>
+            <h2 className="title">{this.props.movie.title}</h2>
+            <img name="image" width="200" src={this.imageUrl} alt={''} />
+            <div>
+              <input
+                type="button"
+                value="Show details"
+                onClick={this.toggleDetails}
+              ></input>
+            </div>
+          </div>
+        </div>
       );
     }
   }

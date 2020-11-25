@@ -5,7 +5,7 @@ import {ratings} from './Firebase';
 
 const key = 'ccdaa563df49d444d84702641c61b0ac';
 
-class Row extends Component {
+class Movie extends Component {
   _isMounted = false;
   imageUrl = '';
   constructor() {
@@ -141,7 +141,13 @@ class Row extends Component {
         <div>
           <div className="movie-container" key={this.props.movie.id}>
             <div className="poster">
-              <img name="image" width="300" src={this.imageUrl} alt={''} />
+              <img
+                className="poster-image"
+                name="image"
+                width="350"
+                src={this.imageUrl}
+                alt={''}
+              />
             </div>
             <div className="title">
               <h2>{this.props.movie.title}</h2>
@@ -186,7 +192,13 @@ class Row extends Component {
         <div className="outter-shell">
           <div className="movie-container" key={this.props.movie.id}>
             <div className="poster">
-              <img name="image" width="200" src={this.imageUrl} alt={''} />
+              <img
+                className="poster-image"
+                name="image"
+                width="200"
+                src={this.imageUrl}
+                alt={''}
+              />
             </div>
             <div className="title">
               <h2>{this.props.movie.title}</h2>
@@ -204,4 +216,4 @@ class Row extends Component {
   }
 }
 
-export default Row;
+export default Movie;

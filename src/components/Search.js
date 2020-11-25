@@ -61,17 +61,32 @@ export class Search extends Component {
   render() {
     return (
       <div>
-        <form className="search-form" onSubmit={this.handleSubmit}>
-          <input
-            name="input"
-            className="search-input"
-            type="text"
-            placeholder="Enter movie title"
-            autoComplete="off"
-            onChange={this.handleChange}
-          ></input>
-        </form>
-        <div className="rows">{this.state.rows}</div>
+        <div className="header">
+          <div>
+            <h1>YearOne Movie Search</h1>
+          </div>
+          <form className="search-form" onSubmit={this.handleSubmit}>
+            <input
+              name="input"
+              className="search-input"
+              type="text"
+              placeholder="Enter movie title"
+              autoComplete="off"
+              onChange={this.handleChange}
+            ></input>
+          </form>
+        </div>
+
+        <div className="all-movies">
+          <div className="rows">{this.state.rows}</div>
+          <a
+            href="https://www.themoviedb.org/"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <img width="50" src="blue_square.svg" alt=""></img>
+          </a>
+        </div>
       </div>
     );
   }

@@ -179,7 +179,7 @@ class Row extends Component {
         <div className="movie-container" key={this.props.movie.id}>
           <div>
             <h2 className="title">{this.props.movie.title}</h2>
-            <img name="image" width="120" src={this.imageUrl} alt={''} />
+            <img name="image" width="200" src={this.imageUrl} alt={''} />
             <div>
               <input
                 type="button"
@@ -187,9 +187,6 @@ class Row extends Component {
                 onClick={this.toggleDetails}
               ></input>
             </div>
-          </div>
-          <div>
-            <p>Released {newDate}</p>
           </div>
         </div>
       );

@@ -1,6 +1,6 @@
 import {Component} from 'react';
 import Movie from './Movie';
-
+import {Header} from './Header';
 const axios = require('axios');
 const key = 'ccdaa563df49d444d84702641c61b0ac';
 const input = 'Evil Dead';
@@ -62,13 +62,7 @@ export class Search extends Component {
     return (
       <div>
         <div className="header">
-          <div>
-            <img
-              width="500px"
-              src="https://static.wixstatic.com/media/c93ed2_c57eae83724f4b9da0171370812ea7d8~mv2.png/v1/fill/w_766,h_118,al_c,q_85,usm_0.66_1.00_0.01/YearOne-Logo-WhiteYellow.webp"
-              alt="YearOne Movies"
-            ></img>
-          </div>
+          <Header />
           <form className="search-form" onSubmit={this.handleSubmit}>
             <input
               name="input"

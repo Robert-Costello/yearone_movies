@@ -151,7 +151,6 @@ class Movie extends Component {
               />
             </div>
             <div className="title">
-              <h2>{this.props.movie.title}</h2>
               <div className="hide-rate">
                 <input
                   className="rate-button"
@@ -179,6 +178,7 @@ class Movie extends Component {
               </div>
             </div>
             <div className="details">
+              <h2>{this.props.movie.title}</h2>
               <h3>Directed by {this.props.movie.director}</h3>
               <h3>Starring {this.props.movie.starring}</h3>
               <ReleaseDate date={this.props.movie.release_date} />

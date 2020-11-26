@@ -2,6 +2,7 @@ import {Component} from 'react';
 import axios from 'axios';
 
 import {ratings} from './Firebase';
+import ReleaseDate from './ReleaseDate';
 
 const key = 'ccdaa563df49d444d84702641c61b0ac';
 
@@ -49,7 +50,7 @@ class Movie extends Component {
       dateString.slice(8) +
       '/' +
       dateString.slice(0, 4);
-    return newDate;
+    return newDate.length === 2 ? '' : newDate;
   }
 
   toggleDetails() {
@@ -164,14 +165,14 @@ class Movie extends Component {
                     className="rate-button"
                     name="likes"
                     type="button"
-                    value={`⭐ ${this.state.likes}`}
+                    value={`👍 ${this.state.likes}`}
                     onClick={this.rate}
                   ></input>
                   <input
                     className="rate-button"
                     name="dislikes"
                     type="button"
-                    value={`💔 ${this.state.dislikes}`}
+                    value={`👎 ${this.state.dislikes}`}
                     onClick={this.rate}
                   ></input>
                 </div>
@@ -180,7 +181,7 @@ class Movie extends Component {
             <div className="details">
               <h3>Directed by {this.props.movie.director}</h3>
               <h3>Starring {this.props.movie.starring}</h3>
-              <h4>Released {newDate}</h4>
+              <ReleaseDate date={this.props.movie.release_date} />
               <p>{this.props.movie.overview}</p>
             </div>
           </div>

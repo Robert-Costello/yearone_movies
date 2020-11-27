@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import {ratings} from './Firebase';
 import ReleaseDate from './ReleaseDate';
+import {key} from '../secrets';
 
 class Movie extends Component {
   _isMounted = false;
@@ -21,7 +22,7 @@ class Movie extends Component {
   // Grabs crew/cast information at separate endpoint from general movie info
   async getCrewCast(movie) {
     try {
-      const castCrewResponse = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=ccdaa563df49d444d84702641c61b0ac&language=en-US
+      const castCrewResponse = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${key}&language=en-US
         `);
 
       const director = castCrewResponse.data.crew.filter(

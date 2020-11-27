@@ -2,13 +2,12 @@ import {Component} from 'react';
 import Movie from './Movie';
 import {Header} from './Header';
 const axios = require('axios');
-const key = 'ccdaa563df49d444d84702641c61b0ac';
-const input = 'Evil Dead';
 
-export class Search extends Component {
+class Search extends Component {
   _isMounted = false;
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
+
     this.getMovies = this.getMovies.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,7 +19,7 @@ export class Search extends Component {
   async getMovies(title) {
     try {
       const response = await axios.get(
-        `https://api.themoviedb.org/3/search/movie?api_key=${key}&language=en-US&query=${title}&include_adult=false`
+        `https://api.themoviedb.org/3/search/movie?api_key=ccdaa563df49d444d84702641c61b0ac&language=en-US&query=${title}&include_adult=false`
       );
 
       const movies = response.data.results;
@@ -30,7 +29,9 @@ export class Search extends Component {
       let movieComponents = [];
 
       movies.map((movie) => {
-        const movieComponent = <Movie key={movie.id} movie={movie} />;
+        const movieComponent = (
+          <Movie aria-label="movie" key={movie.id} movie={movie} />
+        );
         movieComponents.push(movieComponent);
         return movie;
       });
@@ -43,6 +44,8 @@ export class Search extends Component {
           this.setState({movies: [movieComponents]});
         }
       }
+
+      return movies;
     } catch (error) {
       console.log(error);
     }
@@ -106,3 +109,5 @@ export class Search extends Component {
     );
   }
 }
+
+export default Search;

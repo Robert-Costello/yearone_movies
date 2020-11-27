@@ -4,8 +4,6 @@ import axios from 'axios';
 import {ratings} from './Firebase';
 import ReleaseDate from './ReleaseDate';
 
-const key = 'ccdaa563df49d444d84702641c61b0ac';
-
 class Movie extends Component {
   _isMounted = false;
   imageUrl = '';
@@ -23,7 +21,7 @@ class Movie extends Component {
   // Grabs crew/cast information at separate endpoint from general movie info
   async getCrewCast(movie) {
     try {
-      const castCrewResponse = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${key}&language=en-US
+      const castCrewResponse = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=ccdaa563df49d444d84702641c61b0ac&language=en-US
         `);
 
       const director = castCrewResponse.data.crew.filter(
@@ -40,6 +38,8 @@ class Movie extends Component {
       if (this._isMounted) {
         this.setState({direct: directorName, starring: starring});
       }
+
+      return {director: director, starring: starring};
     } catch (error) {
       console.log(error);
     }
@@ -140,7 +140,7 @@ class Movie extends Component {
 
     if (this.state.detailView) {
       return (
-        <div className="outter-shell">
+        <div name="outter-shell" className="outter-shell">
           <div className="movie-container" key={this.props.movie.id}>
             <div className="poster">
               <img

@@ -2,12 +2,12 @@ import {Component} from 'react';
 import Movie from './Movie';
 import {Header} from './Header';
 const axios = require('axios');
-const key = 'ccdaa563df49d444d84702641c61b0ac';
-const input = 'Evil Dead';
 
-export class Search extends Component {
-  constructor(props) {
-    super(props);
+class Search extends Component {
+  _isMounted = false;
+  constructor() {
+    super();
+
     this.getMovies = this.getMovies.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -19,27 +19,33 @@ export class Search extends Component {
   async getMovies(title) {
     try {
       const response = await axios.get(
-        `https://api.themoviedb.org/3/search/movie?api_key=${key}&language=en-US&query=${title}&include_adult=false`
+        `https://api.themoviedb.org/3/search/movie?api_key=ccdaa563df49d444d84702641c61b0ac&language=en-US&query=${title}&include_adult=false`
       );
 
       const movies = response.data.results;
-      console.log(movies);
+
       movies.sort((a, b) => b.popularity - a.popularity);
 
       let movieComponents = [];
 
       movies.map((movie) => {
-        const movieComponent = <Movie key={movie.id} movie={movie} />;
+        const movieComponent = (
+          <Movie aria-label="movie" key={movie.id} movie={movie} />
+        );
         movieComponents.push(movieComponent);
         return movie;
       });
 
-      if (this.state.rows) {
-        this.setState({moivies: []});
-        this.setState({moivies: [movieComponents]});
-      } else {
-        this.setState({movies: [movieComponents]});
+      if (this._isMounted) {
+        if (this.state.rows) {
+          this.setState({moivies: []});
+          this.setState({moivies: [movieComponents]});
+        } else {
+          this.setState({movies: [movieComponents]});
+        }
       }
+
+      return movies;
     } catch (error) {
       console.log(error);
     }
@@ -56,16 +62,25 @@ export class Search extends Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     // Intial data fetch
     this.getMovies('Spider Man');
   }
 
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   render() {
     return (
-      <div>
+      <div name="search-container">
         <div className="header">
           <Header />
-          <form className="search-form" onSubmit={this.handleSubmit}>
+          <form
+            aria-label="search-form"
+            className="search-form"
+            onSubmit={this.handleSubmit}
+          >
             <input
               name="input"
               className="search-input"
@@ -80,7 +95,6 @@ export class Search extends Component {
             </svg>
           </form>
         </div>
-
         <div className="all-movies">
           <div className="rows">{this.state.movies}</div>
           <a
@@ -95,3 +109,5 @@ export class Search extends Component {
     );
   }
 }
+
+export default Search;

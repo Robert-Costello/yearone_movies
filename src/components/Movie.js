@@ -30,13 +30,16 @@ class Movie extends Component {
         (person) => person.job === 'Director'
       )[0];
 
-      const starring = castCrewResponse.data.cast[0].name;
+      const starring = castCrewResponse.data.cast[0]
+        ? castCrewResponse.data.cast[0].name
+        : '';
 
       movie['director'] = director ? director.name : 'unlisted';
       movie['starring'] = starring ? starring : 'unlisted';
       const directorName = movie.direct;
-      if (this._isMounted)
+      if (this._isMounted) {
         this.setState({direct: directorName, starring: starring});
+      }
     } catch (error) {
       console.log(error);
     }

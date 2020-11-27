@@ -6,6 +6,7 @@ const key = 'ccdaa563df49d444d84702641c61b0ac';
 const input = 'Evil Dead';
 
 export class Search extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.getMovies = this.getMovies.bind(this);
@@ -23,7 +24,7 @@ export class Search extends Component {
       );
 
       const movies = response.data.results;
-      console.log(movies);
+
       movies.sort((a, b) => b.popularity - a.popularity);
 
       let movieComponents = [];
@@ -34,11 +35,13 @@ export class Search extends Component {
         return movie;
       });
 
-      if (this.state.rows) {
-        this.setState({moivies: []});
-        this.setState({moivies: [movieComponents]});
-      } else {
-        this.setState({movies: [movieComponents]});
+      if (this._isMounted) {
+        if (this.state.rows) {
+          this.setState({moivies: []});
+          this.setState({moivies: [movieComponents]});
+        } else {
+          this.setState({movies: [movieComponents]});
+        }
       }
     } catch (error) {
       console.log(error);
@@ -56,16 +59,25 @@ export class Search extends Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     // Intial data fetch
     this.getMovies('Spider Man');
   }
 
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   render() {
     return (
-      <div>
+      <div name="search-container">
         <div className="header">
           <Header />
-          <form className="search-form" onSubmit={this.handleSubmit}>
+          <form
+            aria-label="search-form"
+            className="search-form"
+            onSubmit={this.handleSubmit}
+          >
             <input
               name="input"
               className="search-input"
@@ -80,7 +92,6 @@ export class Search extends Component {
             </svg>
           </form>
         </div>
-
         <div className="all-movies">
           <div className="rows">{this.state.movies}</div>
           <a

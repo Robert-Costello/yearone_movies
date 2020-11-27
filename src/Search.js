@@ -1,6 +1,7 @@
 import {Component} from 'react';
-import Movie from './Movie';
-import {Header} from './Header';
+import Movie from './components/Movie';
+import {Header} from './components/Header';
+import {key} from './secrets.js';
 const axios = require('axios');
 
 class Search extends Component {
@@ -19,7 +20,7 @@ class Search extends Component {
   async getMovies(title) {
     try {
       const response = await axios.get(
-        `https://api.themoviedb.org/3/search/movie?api_key=ccdaa563df49d444d84702641c61b0ac&language=en-US&query=${title}&include_adult=false`
+        `https://api.themoviedb.org/3/search/movie?api_key=${key}&language=en-US&query=${title}&include_adult=false`
       );
 
       const movies = response.data.results;

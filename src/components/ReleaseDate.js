@@ -8,6 +8,7 @@ class ReleaseDate extends Component {
     this.state = {releaseDate: ''};
   }
 
+  // Takes year-month-day and returns month/day/year
   formatDate(dateString) {
     const date = dateString ? dateString : '';
 
@@ -30,13 +31,10 @@ class ReleaseDate extends Component {
     if (this.releaseDate.length) {
       return (
         <div>
-          <h4>
-            Released
-            {this.releaseDate}
-          </h4>
+          <h4>Released {this.releaseDate}</h4>
         </div>
       );
-    } else return <h5>(Release date unlisted)</h5>;
+    } else return <h5>Released (unlisted)</h5>;
   }
 }
 

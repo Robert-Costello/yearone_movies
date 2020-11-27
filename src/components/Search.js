@@ -15,6 +15,7 @@ export class Search extends Component {
     this.state = {};
   }
 
+  // Grabs all movies that match input title
   async getMovies(title) {
     try {
       const response = await axios.get(
@@ -25,19 +26,19 @@ export class Search extends Component {
       console.log(movies);
       movies.sort((a, b) => b.popularity - a.popularity);
 
-      let movieRows = [];
+      let movieComponents = [];
 
       movies.map((movie) => {
-        const movieRow = <Movie key={movie.id} movie={movie} />;
-        movieRows.push(movieRow);
+        const movieComponent = <Movie key={movie.id} movie={movie} />;
+        movieComponents.push(movieComponent);
         return movie;
       });
 
       if (this.state.rows) {
-        this.setState({rows: []});
-        this.setState({rows: [movieRows]});
+        this.setState({moivies: []});
+        this.setState({moivies: [movieComponents]});
       } else {
-        this.setState({rows: [movieRows]});
+        this.setState({movies: [movieComponents]});
       }
     } catch (error) {
       console.log(error);
@@ -55,7 +56,8 @@ export class Search extends Component {
   }
 
   componentDidMount() {
-    this.getMovies('Zatoichi');
+    // Intial data fetch
+    this.getMovies('Spider Man');
   }
 
   render() {
@@ -80,7 +82,7 @@ export class Search extends Component {
         </div>
 
         <div className="all-movies">
-          <div className="rows">{this.state.rows}</div>
+          <div className="rows">{this.state.movies}</div>
           <a
             href="https://www.themoviedb.org/"
             target="_blank"

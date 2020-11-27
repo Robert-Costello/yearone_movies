@@ -13,7 +13,6 @@ class Movie extends Component {
     super();
 
     this.getCrewCast = this.getCrewCast.bind(this);
-    this.formatDate = this.formatDate.bind(this);
     this.toggleDetails = this.toggleDetails.bind(this);
     this.rate = this.rate.bind(this);
     this.getRatings = this.getRatings.bind(this);
@@ -21,7 +20,7 @@ class Movie extends Component {
     this.state = {detailView: false, likes: 0, dislikes: 0, movieId: ''};
   }
 
-  // Grabs crew (director) information from a separate endpoint from general movie info
+  // Grabs crew/cast information at separate endpoint from general movie info
   async getCrewCast(movie) {
     try {
       const castCrewResponse = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${key}&language=en-US
@@ -43,21 +42,13 @@ class Movie extends Component {
     }
   }
 
-  formatDate(dateString) {
-    const newDate =
-      dateString.slice(5, 7) +
-      '/' +
-      dateString.slice(8) +
-      '/' +
-      dateString.slice(0, 4);
-    return newDate.length === 2 ? '' : newDate;
-  }
-
+  // Switches between detail/tile views then rerenders
   toggleDetails() {
     if (!this.state.detailView) this.setState({detailView: true});
     if (this.state.detailView) this.setState({detailView: false});
   }
 
+  // Updates firestore movie-rating document and UI with like/dislike
   rate(e) {
     const choice = e.target.name;
     let docObj = {
@@ -96,6 +87,7 @@ class Movie extends Component {
     }
   }
 
+  // Subscribes to changes to movie-rating document in firestore
   getRatings(callback) {
     this.unsub = ratings
       .where('id', '==', String(this.props.movie.id))
@@ -109,6 +101,7 @@ class Movie extends Component {
   }
 
   componentDidMount() {
+    // Handle unlisted movie poster url
     if (!this.props.movie.poster_path) {
       this.imageUrl =
         'https://thefemalegazers.files.wordpress.com/2018/08/coming-of-age-film.jpg';
@@ -126,16 +119,21 @@ class Movie extends Component {
     });
   }
 
+  // Disconnect from firestore and mark as unmounted
   componentWillUnmount() {
     this._isMounted = false;
     this.unsub();
   }
 
   render() {
-    const releaseDate = this.props.movie.release_date
-      ? this.props.movie.release_date
-      : '';
-    const newDate = this.formatDate(releaseDate);
+    // Handle unlisted cast/crew
+    const director = this.props.movie.director
+      ? this.props.movie.director
+      : '(unlisted)';
+
+    const starring = this.props.movie.starring
+      ? this.props.movie.starring
+      : '(unlisted)';
 
     if (this.state.detailView) {
       return (
@@ -151,7 +149,6 @@ class Movie extends Component {
               />
             </div>
             <div className="title">
-              <h2>{this.props.movie.title}</h2>
               <div className="hide-rate">
                 <input
                   className="rate-button"
@@ -179,8 +176,9 @@ class Movie extends Component {
               </div>
             </div>
             <div className="details">
-              <h3>Directed by {this.props.movie.director}</h3>
-              <h3>Starring {this.props.movie.starring}</h3>
+              <h2>{this.props.movie.title}</h2>
+              <h3>Directed by {director}</h3>
+              <h3>Starring {starring}</h3>
               <ReleaseDate date={this.props.movie.release_date} />
               <p>{this.props.movie.overview}</p>
             </div>

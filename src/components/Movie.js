@@ -3,7 +3,8 @@ import axios from 'axios';
 
 import {ratings} from './Firebase';
 import ReleaseDate from './ReleaseDate';
-import {key} from '../secrets';
+
+const key = 'ccdaa563df49d444d84702641c61b0ac';
 
 class Movie extends Component {
   _isMounted = false;
@@ -29,18 +30,14 @@ class Movie extends Component {
         (person) => person.job === 'Director'
       )[0];
 
-      const starring = castCrewResponse.data.cast[0]
-        ? castCrewResponse.data.cast[0].name
-        : '';
+      const starring = castCrewResponse.data.cast[0].name;
 
       movie['director'] = director ? director.name : 'unlisted';
       movie['starring'] = starring ? starring : 'unlisted';
-      const directorName = movie.direct;
-      if (this._isMounted) {
-        this.setState({direct: directorName, starring: starring});
-      }
 
-      return {director: director, starring: starring};
+      if (this._isMounted) {
+        this.setState({director: movie.director, starring: movie.starring});
+      }
     } catch (error) {
       console.log(error);
     }
@@ -141,7 +138,7 @@ class Movie extends Component {
 
     if (this.state.detailView) {
       return (
-        <div name="outter-shell" className="outter-shell">
+        <div className="outter-shell">
           <div className="movie-container" key={this.props.movie.id}>
             <div className="poster">
               <img

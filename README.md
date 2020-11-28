@@ -6,7 +6,7 @@
 
 ---
 
-### API Instructions:
+### API Instructions
 
     We’re building a small web application that allows a user to search for a movie title, click on that movie title for more information, and give that movie a thumbs up or thumbs down.
     Deliverables:
@@ -24,21 +24,21 @@
      alt="Markdown Monster icon"
      style="float: left; margin-bottom: 15px;" />
 
----
+
 
 <img src="src/YearOne-Movies_2.png"
      alt="Markdown Monster icon"
      style="float: left; margin-bottom: 15px;" />
      
----
+
 
 ![](src/YearOne-Movies_4.gif)
 
----
+
 
 ![](src/YearOne-Movies_3.gif)
 
----
+
 
 ### Clone Repository
 

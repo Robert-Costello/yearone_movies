@@ -33,7 +33,6 @@ describe('Search', () => {
   it('movies have title/id/poster_path prop', async () => {
     const comp = new Search();
     const movies = await comp.getMovies('Spider-Man');
-    console.log(movies[0].poster_path);
     expect(typeof movies[0].id).toBe('number');
     expect(typeof movies[0].title).toBe('string');
     expect(typeof movies[0].poster_path).toBe('string');

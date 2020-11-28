@@ -38,9 +38,9 @@ class Search extends Component {
       });
 
       if (this._isMounted) {
-        if (this.state.rows) {
-          this.setState({moivies: []});
-          this.setState({moivies: [movieComponents]});
+        if (this.state.movies) {
+          this.setState({movies: []});
+          this.setState({movies: [movieComponents]});
         } else {
           this.setState({movies: [movieComponents]});
         }

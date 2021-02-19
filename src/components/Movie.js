@@ -3,8 +3,7 @@ import axios from 'axios';
 
 import {ratings} from './Firebase';
 import ReleaseDate from './ReleaseDate';
-
-const key = 'ccdaa563df49d444d84702641c61b0ac';
+import {key} from '../secrets';
 
 class Movie extends Component {
   _isMounted = false;

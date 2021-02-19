@@ -24,21 +24,13 @@
      alt="Markdown Monster icon"
      style="float: left; margin-bottom: 15px;" />
 
-
-
 <img src="src/YearOne-Movies_2.png"
      alt="Markdown Monster icon"
      style="float: left; margin-bottom: 15px;" />
-     
-
 
 ![](src/YearOne-Movies_4.gif)
 
-
-
 ![](src/YearOne-Movies_3.gif)
-
-
 
 ### Clone Repository
 
@@ -53,7 +45,8 @@
 
     npm start
     Runs the app in the development mode.
-    Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+Open [localhost](http://localhost:3000) to view it in the browser.
 
 ---
 
